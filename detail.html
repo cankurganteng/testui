@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobil Showcase</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+        }
+        .main-content {
+            display: flex;
+            gap: 20px;
+        }
+        .slider-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+        }
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slide {
+            min-width: 100%;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #000;
+        }
+        .slide video, .slide img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+        .thumbnails {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        .thumbnail {
+            width: 60px;
+            height: 40px;
+            cursor: pointer;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: border-color 0.3s;
+        }
+        .thumbnail.active {
+            border-color: #007bff;
+        }
+        .thumbnail img, .thumbnail video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .info {
+            flex: 1;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .info h2 {
+            margin-top: 0;
+        }
+        .info p {
+            margin: 10px 0;
+        }
+        .whatsapp-icon {
+            position: relative;
+            display: inline-block;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+        .whatsapp-icon img {
+            width: 50px;
+            height: 50px;
+        }
+        .popup {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 10;
+            font-family: Arial, sans-serif;
+            width: fit-content;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .popup::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 10px solid transparent;
+            border-top-color: white;
+        }
+        .popup img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .popup .details {
+            display: flex;
+            align-items: center;
+        }
+        /* Responsif untuk tablet dan mobile */
+        @media (max-width: 1024px) {
+            .popup {
+                left: 10px;
+                right: auto;
+                transform: none;
+                max-width: calc(100vw - 20px); /* Agar tidak keluar layar */
+            }
+            .popup::after {
+                left: 25px; /* Tepat di atas tengah logo WA (50px / 2 = 25px) */
+                transform: translateX(-50%);
+            }
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            .slider-container {
+                order: 1;
+            }
+            .info {
+                order: 2;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-content">
+            <div class="slider-container">
+                <div class="slider" id="slider">
+                    <!-- Video pertama -->
+                    <div class="slide">
+                        <video id="video1" muted>
+                            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <!-- Gambar-gambar -->
+                    <div class="slide">
+                        <img src="images/Artboard 2.png" alt="Car Image 1">
+                    </div>
+                    <div class="slide">
+                        <img src="images/Galih.jpeg" alt="Car Image 2">
+                    </div>
+                    <div class="slide">
+                        <img src="images/hoda jazz.jpg" alt="Car Image 3">
+                    </div>
+                    <!-- Duplikasi video untuk loop maju -->
+                    <div class="slide">
+                        <video id="video2" muted>
+                            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div>
+                <div class="thumbnails" id="thumbnails">
+                    <!-- Thumbnail video -->
+                    <div class="thumbnail" data-slide="0">
+                        <video muted>
+                            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <!-- Thumbnail gambar -->
+                    <div class="thumbnail" data-slide="1">
+                        <img src="images/Artboard 2.png" alt="Thumbnail 1">
+                    </div>
+                    <div class="thumbnail" data-slide="2">
+                        <img src="images/Galih.jpeg" alt="Thumbnail 2">
+                    </div>
+                    <div class="thumbnail" data-slide="3">
+                        <img src="images/hoda jazz.jpg" alt="Thumbnail 3">
+                    </div>
+                </div>
+            </div>
+            <div class="info">
+                <h2>Toyota Camry</h2>
+                <p><strong>Tahun:</strong> 2020</p>
+                <p><strong>Jarak Tempuh:</strong> 50,000 km</p>
+                <p><strong>Bahan Bakar:</strong> Bensin</p>
+                <p><strong>Lokasi:</strong> Jakarta</p>
+                <p><strong>Kategori:</strong> Bekas</p>
+                <p><strong>Transmisi:</strong> Manual</p>
+                <p><strong>Harga:</strong> <span style="color: blue; font-weight: bold;">Rp 500.000.000</span></p>
+                <div class="whatsapp-icon" id="whatsappIcon">
+                    <img src="images/logo wa.png" alt="WhatsApp">
+                    <div class="popup" id="popup">
+                        <div class="details">
+                            <img src="images/Galih.jpeg" alt="Profile">
+                            <div>
+                                <strong>John Doe</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const slider = document.getElementById('slider');
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
+        const totalSlides = slides.length; // 5 (termasuk duplikasi)
+        let autoSlideInterval;
+        const video = document.getElementById('video1');
+        const video2 = document.getElementById('video2');
+
+        // Fungsi untuk slide ke slide tertentu
+        function goToSlide(index, instant = false) {
+            if (instant) {
+                slider.style.transition = 'none';
+                slider.style.transform = `translateX(-${index * 100}%)`;
+                setTimeout(() => {
+                    slider.style.transition = 'transform 0.5s ease-in-out';
+                }, 50);
+            } else {
+                slider.style.transform = `translateX(-${index * 100}%)`;
+            }
+            currentSlide = index;
+            // Jika di slide duplikasi (4), reset ke 0 setelah transisi
+            if (index === totalSlides - 1) {
+                setTimeout(() => {
+                    goToSlide(0, true);
+                    video.currentTime = 0;
+                    video.play();
+                }, 500);
+            }
+            // Jika kembali ke video asli (0), play video
+            if (index === 0) {
+                video.currentTime = 0;
+                video.play();
+            }
+        }
+
+        // Video play otomatis saat halaman load
+        window.addEventListener('load', () => {
+            video.play();
+        });
+
+        // Ketika video ended, slide ke gambar pertama dan mulai auto-slide
+        video.addEventListener('ended', () => {
+            video.pause();
+            goToSlide(1);
+            startAutoSlide();
+        });
+
+        // Fungsi untuk memulai auto-slide dari currentSlide
+        function startAutoSlide() {
+            clearInterval(autoSlideInterval); // Pastikan tidak ada interval sebelumnya
+            autoSlideInterval = setInterval(() => {
+                let nextSlide = currentSlide + 1;
+                goToSlide(nextSlide);
+                if (nextSlide === totalSlides - 1) {
+                    clearInterval(autoSlideInterval);
+                }
+            }, 3000);
+        }
+
+        // Klik thumbnail: pindah slide, set active, dan mulai auto-slide dari sana
+        thumbnails.forEach((thumb, index) => {
+            thumb.addEventListener('click', () => {
+                goToSlide(index);
+                // Update active class
+                thumbnails.forEach(t => t.classList.remove('active'));
+                thumb.classList.add('active');
+                // Mulai auto-slide dari slide yang diklik
+                startAutoSlide();
+            });
+        });
+
+        // WhatsApp popup
+        const whatsappIcon = document.getElementById('whatsappIcon');
+        const popup = document.getElementById('popup');
+        whatsappIcon.addEventListener('click', () => {
+            popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Klik popup untuk redirect ke WhatsApp website
+        popup.addEventListener('click', () => {
+            window.open('https://web.whatsapp.com', '_blank');
+        });
+
+        // Tutup popup jika klik di luar
+        document.addEventListener('click', (e) => {
+            if (!whatsappIcon.contains(e.target) && !popup.contains(e.target)) {
+                popup.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
