@@ -137,66 +137,29 @@
 
 
         
-        // Ambil elemen
+       // Ambil elemen
         const btnDetail = document.getElementById('btn-detail');
         const btnShare = document.getElementById('btn-share');
         const sharePopup = document.getElementById('share-popup');
         const overlay1 = document.getElementById('overlay');
         const productCard = document.querySelector('.product-card');
 
-        // Data dari product-card
+        // Data dari product-card untuk sharing
         const brand = productCard.getAttribute('data-brand');
         const price = productCard.getAttribute('data-price');
         const title = productCard.querySelector('h3').textContent;
         const link = 'detail.html'; // Link ke detail.html
+        const message = `Check out this ${brand} ${title} for Rp${price}. Includes video, images, and full description. Link: ${window.location.origin}/${link}`;
 
-        // URL konten dari detail.html (hardcode berdasarkan kode Anda)
-        // const videoUrl = 'https://www.w3schools.com/html/mov_bbb.mp4'; // Video utama
-        const imageUrl = 'https://via.placeholder.com/800x400?text=Car+Image+1'; // Gambar utama
-        const text = `Check out this ${brand} ${title} for Rp${price}. Includes video and images from ${window.location.origin}/${link}`;
-
-        // Fungsi untuk fetch file sebagai blob
-        async function fetchAsBlob(url) {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Failed to fetch file');
-            return await response.blob();
-        }
-
-        // Fungsi untuk share menggunakan Web Share API
-        async function shareContent(platform, fileUrl, fileType) {
-            if (!navigator.share) {
-                // Fallback: Buka URL sharing jika Web Share tidak didukung
-                alert('Browser Anda tidak mendukung sharing langsung. Menggunakan fallback.');
-                const fallbackUrls = {
-                    whatsapp: `https://wa.me/?text=${encodeURIComponent(text + ' ' + window.location.origin + '/' + link)}`,
-                    telegram: `https://t.me/share/url?url=${encodeURIComponent(window.location.origin + '/' + link)}&text=${encodeURIComponent(text)}`,
-                    tiktok: 'https://www.tiktok.com/',
-                    instagram: 'https://www.instagram.com/'
-                };
-                window.open(fallbackUrls[platform], '_blank');
-                closePopup();
-                return;
-            }
-
-            try {
-                const blob = await fetchAsBlob(fileUrl);
-                const file = new File([blob], `${title}.${fileType}`, { type: blob.type });
-
-                await navigator.share({
-                    title: title,
-                    text: text,
-                    files: [file] // Share file langsung
-                });
-                closePopup();
-            } catch (error) {
-                console.error('Error sharing:', error);
-                alert('Gagal membagikan konten. Coba lagi.');
-            }
+        // Fungsi untuk membuka sharing URL
+        function shareTo(platform, url) {
+            window.open(url, '_blank');
+            closePopup(); // Tutup pop-up setelah klik
         }
 
         // Event listener untuk tombol Detail
         btnDetail.addEventListener('click', () => {
-            window.location.href = 'detail.html';
+            window.location.href = 'detail.html'; // Arahkan ke detail.html
         });
 
         // Event listener untuk tombol Share
@@ -207,23 +170,23 @@
 
         // Event listener untuk ikon sosial media
         document.getElementById('share-whatsapp').addEventListener('click', () => {
-            shareContent('whatsapp', imageUrl, 'png', 'jpeg', 'jpg'); // Share video
+            const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            shareTo('WhatsApp', url);
         });
 
         document.getElementById('share-tiktok').addEventListener('click', () => {
-            // TikTok tidak mendukung sharing langsung; buka halaman utama
-            window.open('https://www.tiktok.com/', '_blank');
-            closePopup();
+            const url = 'https://www.tiktok.com/'; // Buka halaman utama TikTok (tidak ada sharing langsung)
+            shareTo('TikTok', url);
         });
 
         document.getElementById('share-instagram').addEventListener('click', () => {
-            // Instagram tidak mendukung sharing langsung; buka halaman utama
-            window.open('https://www.instagram.com/', '_blank');
-            closePopup();
+            const url = 'https://www.instagram.com/'; // Buka halaman utama Instagram (tidak ada sharing langsung)
+            shareTo('Instagram', url);
         });
 
         document.getElementById('share-telegram').addEventListener('click', () => {
-            shareContent('telegram', imageUrl, 'jpg'); // Share gambar (Telegram mendukung file)
+            const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.origin + '/' + link)}&text=${encodeURIComponent(message)}`;
+            shareTo('Telegram', url);
         });
 
         // Fungsi untuk menutup pop-up
