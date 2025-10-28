@@ -148,7 +148,9 @@
         const brand = productCard.getAttribute('data-brand');
         const price = productCard.getAttribute('data-price');
         const title = productCard.querySelector('h3').textContent;
-        const link = 'detail.html'; // Link ke detail.html
+        // const link = 'detail.html'; // Link ke detail.html
+
+        console.log('Generated link:', window.location.origin + '/' + link);
         const message = `Check out this ${brand} ${title} for Rp${price}. Includes video, images, and full description. Link: ${window.location.origin}/${link}`;
 
         // Fungsi untuk membuka sharing URL
@@ -197,5 +199,6 @@
 
         // Tutup pop-up saat klik overlay
         overlay1.addEventListener('click', closePopup);
+
 
 
