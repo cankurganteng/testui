@@ -151,7 +151,7 @@
         const link = 'detail.html'; // Link ke detail.html
 
         // URL konten dari detail.html (hardcode berdasarkan kode Anda)
-        const videoUrl = 'https://www.w3schools.com/html/mov_bbb.mp4'; // Video utama
+        // const videoUrl = 'https://www.w3schools.com/html/mov_bbb.mp4'; // Video utama
         const imageUrl = 'https://via.placeholder.com/800x400?text=Car+Image+1'; // Gambar utama
         const text = `Check out this ${brand} ${title} for Rp${price}. Includes video and images from ${window.location.origin}/${link}`;
 
@@ -234,4 +234,5 @@
 
         // Tutup pop-up saat klik overlay
         overlay1.addEventListener('click', closePopup);
+
 
