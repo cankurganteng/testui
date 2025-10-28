@@ -207,7 +207,7 @@
 
         // Event listener untuk ikon sosial media
         document.getElementById('share-whatsapp').addEventListener('click', () => {
-            shareContent('whatsapp', videoUrl, imageUrl, 'png', 'jpeg', 'jpg', 'mp4'); // Share video
+            shareContent('whatsapp', imageUrl, 'png', 'jpeg', 'jpg'); // Share video
         });
 
         document.getElementById('share-tiktok').addEventListener('click', () => {
@@ -234,3 +234,4 @@
 
         // Tutup pop-up saat klik overlay
         overlay1.addEventListener('click', closePopup);
+
